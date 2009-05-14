@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>register (OAuthActiveResource)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/oauth_active_resource.rb, line 7</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">register</span>(<span class="ruby-identifier">add_to_module</span>, <span class="ruby-identifier">model_module</span>, <span class="ruby-identifier">options</span> = {})
+    
+    <span class="ruby-identifier">oauth_connection</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:access_token</span>]
+    <span class="ruby-identifier">site</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:site</span>]
+<span class="ruby-comment cmt">#    if options[:access_token].nil?</span>
+<span class="ruby-comment cmt">#      access_token = nil</span>
+<span class="ruby-comment cmt">#      if options[:site].nil?</span>
+<span class="ruby-comment cmt">#        raise 'Need an oauth :access_token or a :site'</span>
+<span class="ruby-comment cmt">#      else</span>
+<span class="ruby-comment cmt">#        site = options[:site]</span>
+<span class="ruby-comment cmt">#      end</span>
+<span class="ruby-comment cmt">#    else</span>
+<span class="ruby-comment cmt">#      if options[:site].nil?</span>
+<span class="ruby-comment cmt">#        site = access_token.consumer.site</span>
+<span class="ruby-comment cmt">#      else</span>
+<span class="ruby-comment cmt">#       site = options[:site]</span>
+<span class="ruby-comment cmt">#      end      </span>
+<span class="ruby-comment cmt">#    end</span>
+    
+    <span class="ruby-identifier">mod</span> = <span class="ruby-constant">Module</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span>
+      <span class="ruby-identifier">model_module</span>.<span class="ruby-identifier">constants</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">klass</span><span class="ruby-operator">|</span>
+        <span class="ruby-comment cmt"># TODO check if klass.is_a OAuthActiveResource</span>
+        <span class="ruby-identifier">sub</span> = <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">model_module</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">klass</span>)) <span class="ruby-keyword kw">do</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">site</span> = <span class="ruby-identifier">site</span>          
+          <span class="ruby-ivar">@oauth_connection</span> = <span class="ruby-identifier">oauth_connection</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-identifier">const_set</span>(<span class="ruby-identifier">klass</span>, <span class="ruby-identifier">sub</span>)
+      <span class="ruby-keyword kw">end</span>
+      
+      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">name</span>,<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">name</span>)
+      <span class="ruby-keyword kw">rescue</span>
+        <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">name</span>,<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+      <span class="ruby-keyword kw">end</span>
+      
+    <span class="ruby-keyword kw">end</span>
+    
+    <span class="ruby-comment cmt"># Obscure (=Hash) token+secret, b/c it should stay one</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">oauth_connection</span>.<span class="ruby-identifier">nil?</span>
+      <span class="ruby-identifier">dynamic_module_name</span> = <span class="ruby-value str">&quot;AnonymousConsumer&quot;</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">hash</span> = <span class="ruby-constant">Digest</span><span class="ruby-operator">::</span><span class="ruby-constant">MD5</span>.<span class="ruby-identifier">hexdigest</span>(<span class="ruby-node">&quot;#{oauth_connection.token}#{oauth_connection.secret}&quot;</span>)      
+      <span class="ruby-identifier">dynamic_module_name</span> = <span class="ruby-node">&quot;OAuthConsumer#{hash}&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+    
+    <span class="ruby-identifier">add_to_module</span>.<span class="ruby-identifier">const_set</span>(<span class="ruby-identifier">dynamic_module_name</span>, <span class="ruby-identifier">mod</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">mod</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

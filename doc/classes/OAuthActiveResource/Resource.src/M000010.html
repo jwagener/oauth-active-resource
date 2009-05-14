@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>has_many (OAuthActiveResource::Resource)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/oauth_active_resource/resource.rb, line 50</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">has_many</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+      <span class="ruby-identifier">args</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> 
+        <span class="ruby-identifier">name</span> = <span class="ruby-identifier">k</span>.<span class="ruby-identifier">to_s</span>
+        <span class="ruby-identifier">singular</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">singularize</span>
+        <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">k</span>) <span class="ruby-keyword kw">do</span>          
+          <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@has_many_cache</span>.<span class="ruby-identifier">nil?</span>
+            <span class="ruby-ivar">@has_many_cache</span> = {}
+          <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">not</span> <span class="ruby-ivar">@has_many_cache</span>[<span class="ruby-identifier">name</span>]
+            <span class="ruby-identifier">uri</span> = <span class="ruby-node">&quot;/#{self.element_name.pluralize}/#{self.id}/#{name}&quot;</span>
+            <span class="ruby-identifier">resource</span>  = <span class="ruby-identifier">find_or_create_resource_for</span>(<span class="ruby-identifier">singular</span>)
+            <span class="ruby-ivar">@has_many_cache</span>[<span class="ruby-identifier">name</span>] = <span class="ruby-constant">OAuthActiveResource</span><span class="ruby-operator">::</span><span class="ruby-constant">Collection</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">connection</span>,<span class="ruby-identifier">resource</span>,<span class="ruby-identifier">uri</span>)
+          <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@has_many_cache</span>[<span class="ruby-identifier">name</span>]          
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

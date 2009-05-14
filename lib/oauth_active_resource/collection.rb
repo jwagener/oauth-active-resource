@@ -1,4 +1,4 @@
-module OAuthActiveResource
+apimodule OAuthActiveResource
   # see has_many in Resource
   class Collection < Set
     def initialize(connection, resource, collection_uri)        
@@ -17,7 +17,6 @@ module OAuthActiveResource
       raise "NotImplemented"
     end
     
-    # TODO extract api.soundcloud.com
     def save
       @connection.put("#{@resource.class.site}#{@collection_uri}",self.to_json,{ 'Accept'=>'application/json', 'Content-Type' => 'application/json' })
     end
