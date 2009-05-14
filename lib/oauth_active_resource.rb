@@ -8,21 +8,7 @@ module OAuthActiveResource
     
     oauth_connection = options[:access_token]
     site = options[:site]
-#    if options[:access_token].nil?
-#      access_token = nil
-#      if options[:site].nil?
-#        raise 'Need an oauth :access_token or a :site'
-#      else
-#        site = options[:site]
-#      end
-#    else
-#      if options[:site].nil?
-#        site = access_token.consumer.site
-#      else
-#       site = options[:site]
-#      end      
-#    end
-    
+
     mod = Module.new do
       model_module.constants.each do |klass|
         # TODO check if klass.is_a OAuthActiveResource
