@@ -1,4 +1,4 @@
-apimodule OAuthActiveResource
+module OAuthActiveResource
   # see has_many in Resource
   class Collection < Set
     def initialize(connection, resource, collection_uri)        
