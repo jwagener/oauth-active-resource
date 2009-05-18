@@ -1,4 +1,8 @@
+require 'rubygems'
+
+gem 'activeresource'
 require 'activeresource'
+
 require 'digest/md5'
 
 module OAuthActiveResource

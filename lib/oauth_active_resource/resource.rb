@@ -1,7 +1,4 @@
-require 'rubygems'
-gem 'multipart'
 require 'multipart'
-
 require 'uri'
 
 module OAuthActiveResource

@@ -8,7 +8,12 @@ begin
     gem.summary = %Q{TODO}
     gem.email = "johannes@wagener.cc"
     gem.homepage = "http://github.com/jwagener/oauth-active-resource"
-    gem.authors = ["jwagener"]
+    gem.authors = ["Johannes Wagener"]
+    gem.add_dependency "oauth"
+    gem.add_dependency "activeresource"    
+    gem.add_dependency "multipart"    
+    
+    #    gem.add_dependency "uri"    
 
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
