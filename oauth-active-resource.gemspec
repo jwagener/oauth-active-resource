@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{oauth-active-resource}
-  s.version = "0.1.1"
+  s.version = "0.1.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Johannes Wagener"]
-  s.date = %q{2009-05-18}
+  s.date = %q{2009-05-20}
   s.email = %q{johannes@wagener.cc}
   s.extra_rdoc_files = [
     "LICENSE",
@@ -18,9 +18,10 @@ Gem::Specification.new do |s|
     "Rakefile",
     "VERSION.yml",
     "lib/oauth_active_resource.rb",
-    "lib/oauth_active_resource/collection.rb",
     "lib/oauth_active_resource/connection.rb",
+    "lib/oauth_active_resource/fake_oauth_access_token.rb",
     "lib/oauth_active_resource/resource.rb",
+    "lib/oauth_active_resource/unique_resource_array.rb",
     "spec/oauth_active_resource_spec.rb",
     "spec/spec_helper.rb"
   ]

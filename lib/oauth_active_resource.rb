@@ -11,6 +11,11 @@ module OAuthActiveResource
   def self.register(add_to_module, model_module, options = {})
     
     oauth_connection = options[:access_token]
+    
+    if oauth_connection.nil?
+      oauth_connection = FakeOAuthAccessToken.new 
+    end
+    
     site = options[:site]
 
     mod = Module.new do
@@ -39,7 +44,12 @@ module OAuthActiveResource
       dynamic_module_name = "OAuthConsumer#{hash}"
     end
     
-    add_to_module.const_set(dynamic_module_name, mod)
+    if add_to_module.const_defined? dynamic_module_name
+      mod = add_to_module.const_get dynamic_module_name  
+    else
+      add_to_module.const_set(dynamic_module_name, mod) 
+    end
+    
     return mod
   end
   
@@ -48,5 +58,5 @@ end
 
 require 'oauth_active_resource/connection'
 require 'oauth_active_resource/resource'
-require 'oauth_active_resource/collection'
-
+require 'oauth_active_resource/unique_resource_array'
+require 'oauth_active_resource/fake_oauth_access_token'

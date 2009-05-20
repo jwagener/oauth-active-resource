@@ -21,7 +21,17 @@ module OAuthActiveResource
       super(*args)  
       self.id = self.uri.split('/').last if self.id.nil? and defined? self.uri
     end
-     
+    
+    def ==(other)
+        return (other.is_a? Resource) && (self.is_a? Resource) && (self.element_name == other.element_name) && (self.id == other.id)
+      rescue
+        return super(other)
+    end
+    
+    def self.load_collection(*args)
+      instantiate_collection(*args)
+    end     
+    
     # has_many allows resources with sub-resources which arent nested to be accessable.
     #
     # Example:
@@ -53,15 +63,15 @@ module OAuthActiveResource
             @has_many_cache = {}
           end
           if not @has_many_cache[name]
-            uri = "/#{self.element_name.pluralize}/#{self.id}/#{name}"
+
+            collection_path = "/#{self.element_name.pluralize}/#{self.id}/#{name}"
             resource  = find_or_create_resource_for(singular)
-            @has_many_cache[name] = OAuthActiveResource::Collection.new(self.connection,resource,uri)
+            @has_many_cache[name] = OAuthActiveResource::UniqueResourceArray.new(self.connection,resource,collection_path)
           end
           return @has_many_cache[name]          
         end
       end
     end
-    
     
     # allows you to POST/PUT an oauth authenticated multipart request
     def self.send_multipart_request(method,path,file_param_name,file,params={})
@@ -70,12 +80,9 @@ module OAuthActiveResource
         params[:_method] = "PUT"
       end
       post_file = Net::HTTP::FileForPost.new(file)
-      req.set_multipart_data({file_param_name => post_file},params)     
-
-      oauth_connection.sign!(req)                  
-      uri = URI.parse oauth_connection.consumer.site      
-      
-      res = Net::HTTP.new(uri.host,uri.port).start do |http|
+      req.set_multipart_data({file_param_name => post_file},params)  
+      oauth_connection.sign!(req) if not oauth_connection.nil?   
+      res = Net::HTTP.new(site.host, site.port).start do |http|
         http.request(req)
       end
       res

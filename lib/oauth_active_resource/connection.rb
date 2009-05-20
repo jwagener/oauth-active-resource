@@ -11,13 +11,18 @@ module OAuthActiveResource
       request(:get, path, build_request_headers(headers, :get))
     end
     
+    # make handle_response public
+    def handle_response(*args)
+      super(*args)
+    end
+    
    private
     def request(method, path, *arguments)    
       if @oauth_connection == nil
         super(method, path, *arguments)
       else
-        result = @oauth_connection.send(method, "#{site.scheme}://#{site.host}:#{site.port}#{path}", *arguments) 
-        handle_response(result)
+        response = @oauth_connection.request(method, "#{site.scheme}://#{site.host}:#{site.port}#{path}", *arguments) 
+        handle_response(response)
       end
     rescue Timeout::Error => e 
       raise TimeoutError.new(e.message)
