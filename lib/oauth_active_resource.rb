@@ -34,6 +34,10 @@ module OAuthActiveResource
         super(name,*args)
       end
       
+      def self.destroy
+        name =  self.model_name.split('::').last
+        p self.parent.send :remove_const, name
+      end    
     end
     
     # Obscure (=Hash) token+secret, b/c it should stay one

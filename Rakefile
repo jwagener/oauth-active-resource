@@ -12,10 +12,6 @@ begin
     gem.add_dependency "oauth"
     gem.add_dependency "activeresource"    
     gem.add_dependency "multipart"    
-    
-    #    gem.add_dependency "uri"    
-
-    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"

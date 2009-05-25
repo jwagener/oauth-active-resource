@@ -31,6 +31,26 @@ module OAuthActiveResource
     def self.load_collection(*args)
       instantiate_collection(*args)
     end     
+
+    #
+    #   belongs_to :user
+    #  => will look for a user-id tag and load this user
+    # 
+    def self.belongs_to(*args)
+      args.each do |k| 
+        name = k.to_s
+        define_method(k) do          
+          if @belongs_to_cache.nil?
+            @belongs_to_cache = {}
+          end
+          if not @belongs_to_cache[name]
+            resource  = find_or_create_resource_for(name)
+            @belongs_to_cache[name] = resource.find(self.send("#{name}_id"))
+          end
+          return @belongs_to_cache[name]          
+        end
+      end
+    end
     
     # has_many allows resources with sub-resources which arent nested to be accessable.
     #
