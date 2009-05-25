@@ -72,23 +72,27 @@ module OAuthActiveResource
     #   stranger = User.find(987)
     #   user.friends << stranger
     #   user.friends.save
-    #  => sends a PUT with collection of friends to http://example.com/users/123/friends
+    #  => sends a PUT with collection of friends to http://example.com/users/123/friends ## OUTDATED!!?
     
     def self.has_many(*args)
       args.each do |k| 
         name = k.to_s
         singular = name.singularize
-        define_method(k) do          
-          if @has_many_cache.nil?
-            @has_many_cache = {}
-          end
-          if not @has_many_cache[name]
+        define_method(k) do |*options|   
+          
+          options = options.first || {}      
+          #if @has_many_cache.nil?
+          #  @has_many_cache = {}
+          #end
+          @has_many_cache ||= {}
+          cache_name = "#{name}#{options.hash}"
+          if not @has_many_cache[cache_name]
 
             collection_path = "/#{self.element_name.pluralize}/#{self.id}/#{name}"
             resource  = find_or_create_resource_for(singular)
-            @has_many_cache[name] = OAuthActiveResource::UniqueResourceArray.new(self.connection,resource,collection_path)
+            @has_many_cache[cache_name] = OAuthActiveResource::UniqueResourceArray.new(self.connection,resource,collection_path,options)
           end
-          return @has_many_cache[name]          
+          return @has_many_cache[cache_name]          
         end
       end
     end

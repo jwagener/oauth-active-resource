@@ -38,12 +38,13 @@ module OAuthActiveResource
   
   # see has_many in Resource
   class UniqueResourceArray < UniqueArray
-    def initialize(connection, resource,  collection_path)   
+    def initialize(connection, resource,  collection_path,options = {})   
       super()   
       
       @connection = connection
       @collection_path = collection_path
       @resource = resource
+      @options = options
       reload
     end
    
@@ -78,7 +79,7 @@ module OAuthActiveResource
     end
     
     def reload
-      self.replace(@resource.find(:all, :from => @collection_path))
+      self.replace(@resource.find(:all, :from => @collection_path, :params => @options))
       return self
     end
   end
