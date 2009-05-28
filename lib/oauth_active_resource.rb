@@ -36,7 +36,7 @@ module OAuthActiveResource
       
       def self.destroy
         name =  self.model_name.split('::').last
-        p self.parent.send :remove_const, name
+        self.parent.send :remove_const, name
       end    
     end
     

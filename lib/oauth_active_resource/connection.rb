@@ -11,9 +11,21 @@ module OAuthActiveResource
       request(:get, path, build_request_headers(headers, :get))
     end
     
-    # make handle_response public
-    def handle_response(*args)
-      super(*args)
+    # make handle_response public and add error message from body if possible
+    def handle_response(response)
+      return super(response)
+    rescue ActiveResource::ClientError => exc
+      begin
+        # ugly code to insert the error_message into response
+        error_message = "#{format.decode response.body}"
+        if not error_message.nil? or error_message == ""
+          exc.response.instance_eval do || 
+            @message = error_message
+          end
+        end 
+      ensure
+        raise exc
+      end
     end
     
    private
