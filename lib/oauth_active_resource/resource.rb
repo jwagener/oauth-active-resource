@@ -98,13 +98,17 @@ module OAuthActiveResource
     end
     
     # allows you to POST/PUT an oauth authenticated multipart request
-    def self.send_multipart_request(method,path,file_param_name,file,params={})
+    def self.send_multipart_request(method,path,files,params={})
       req = Net::HTTP::Post.new(path)
       if method == :put
         params[:_method] = "PUT"
       end
-      post_file = Net::HTTP::FileForPost.new(file)
-      req.set_multipart_data({file_param_name => post_file},params)  
+      file_hash = {}
+      files.each do |k,v|
+        file_hash[k] = Net::HTTP::FileForPost.new(v)
+      end
+      req.set_multipart_data(file_hash, params)  
+      
       oauth_connection.sign!(req) if not oauth_connection.nil?   
       res = Net::HTTP.new(site.host, site.port).start do |http|
         http.request(req)
