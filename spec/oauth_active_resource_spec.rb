@@ -1,6 +1,6 @@
 require 'rubygems'
 
-gem 'oauth'
+gem 'pelle-oauth', '0.3.6'
 require 'oauth'
 
 require 'spec_helper'
