@@ -9,7 +9,7 @@ begin
     gem.email = "johannes@wagener.cc"
     gem.homepage = "http://github.com/jwagener/oauth-active-resource"
     gem.authors = ["Johannes Wagener"]
-    gem.add_dependency "oauth"
+    gem.add_dependency "pelle-oauth"
     gem.add_dependency "activeresource"    
     gem.add_dependency "multipart"    
   end
