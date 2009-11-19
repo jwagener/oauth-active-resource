@@ -97,12 +97,27 @@ module OAuthActiveResource
       end
     end
     
+    
+    # ignore is added because the multipart gem is adding an extra new line 
+    # to the last parameter which will break parsing of track[sharing]
+    def self.multipart_bug_fix(params)
+      ordered_params = ActiveSupport::OrderedHash.new
+      params.each do |k,v|
+        ordered_params[k] = v
+      end
+      ordered_params[:ignore] = 'multipart bug'
+      ordered_params
+    end
+    
     # allows you to POST/PUT an oauth authenticated multipart request
-    def self.send_multipart_request(method,path,files,params={})
+    def self.send_multipart_request(method, path, files, params={})
       req = Net::HTTP::Post.new(path)
       if method == :put
         params[:_method] = "PUT"
       end
+      
+      params = multipart_bug_fix(params)
+      
       file_hash = {}
       files.each do |k,v|
         file_hash[k] = Net::HTTP::FileForPost.new(v)

@@ -5,11 +5,11 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "oauth-active-resource"
-    gem.summary = %Q{TODO}
+    gem.summary = "An OAuth enabled ActiveResource wrapper" 
     gem.email = "johannes@wagener.cc"
     gem.homepage = "http://github.com/jwagener/oauth-active-resource"
     gem.authors = ["Johannes Wagener"]
-    gem.add_dependency "pelle-oauth"
+    gem.add_dependency "oauth", ">= 0.3.6"
     gem.add_dependency "activeresource"    
     gem.add_dependency "multipart"    
   end
