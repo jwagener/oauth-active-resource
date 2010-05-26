@@ -1,7 +1,6 @@
 module OAuthActiveResource
-
   class Connection < ActiveResource::Connection
-    def initialize(oauth_connection, *args)    
+    def initialize(oauth_connection, *args)
       @oauth_connection = oauth_connection
       super(*args)
     end
@@ -19,25 +18,25 @@ module OAuthActiveResource
         # ugly code to insert the error_message into response
         error_message = "#{format.decode response.body}"
         if not error_message.nil? or error_message == ""
-          exc.response.instance_eval do || 
+          exc.response.instance_eval do ||
             @message = error_message
           end
-        end 
+        end
       ensure
         raise exc
       end
     end
     
-   private
-    def request(method, path, *arguments)    
+  private
+    def request(method, path, *arguments)
       if @oauth_connection == nil
         super(method, path, *arguments)
       else
-        response = @oauth_connection.request(method, "#{site.scheme}://#{site.host}:#{site.port}#{path}", *arguments) 
+        response = @oauth_connection.request(method, "#{site.scheme}://#{site.host}:#{site.port}#{path}", *arguments)
         handle_response(response)
       end
-    rescue Timeout::Error => e 
+    rescue Timeout::Error => e
       raise TimeoutError.new(e.message)
-    end   
+    end
   end
 end

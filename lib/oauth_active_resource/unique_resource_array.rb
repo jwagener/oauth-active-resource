@@ -38,8 +38,8 @@ module OAuthActiveResource
   
   # see has_many in Resource
   class UniqueResourceArray < UniqueArray
-    def initialize(connection, resource,  collection_path,options = {})   
-      super()   
+    def initialize(connection, resource,  collection_path,options = {})
+      super()
       
       @connection = connection
       @collection_path = collection_path
@@ -58,20 +58,19 @@ module OAuthActiveResource
       return "<#{pt}> #{self.map { |obj| obj.to_xml({:skip_instruct => true})}.join(' ')} </#{pt}>"
     end
     
-    
     # DEPRECATED...
-    #def find(look_for)
-    #  if not (look_for.is_a? String or look_for.is_a? Integer)
-    #    look_for_id = look_for
-    #  else      
-    #    look_for_id = look_for.id
-    #  end  
-    #  
-    #  self.each do |obj|
-    #      obj.id == look_for_id and return obj 
-    #  end
-    #  return nil
-    #end
+    # def find(look_for)
+    #   if not (look_for.is_a? String or look_for.is_a? Integer)
+    #     look_for_id = look_for
+    #   else
+    #     look_for_id = look_for.id
+    #   end
+    #
+    #   self.each do |obj|
+    #       obj.id == look_for_id and return obj
+    #   end
+    #   return nil
+    # end
     
     def save
       response = @connection.handle_response( @connection.put("#{@collection_path}",self.to_xml) )
@@ -83,5 +82,4 @@ module OAuthActiveResource
       return self
     end
   end
-
 end

@@ -1,16 +1,14 @@
 module OAuthActiveResource
-  
   # just simulates the request and sign! methods of a oauth access token
-  class FakeOAuthAccessToken < OAuth::Consumer
-    
+  class FakeOAuthAccessToken < ::OAuth::Consumer
     attr_accessor :token, :secret
     def initialize()
       @key    = nil
-      token = 'Anonymous'
-      secret = 'Anonymous'
+      token   = 'Anonymous'
+      secret  = 'Anonymous'
       
       # ensure that keys are symbols
-      @options = @@default_options    
+      @options = @@default_options
     end
     
     def request(http_method, path, token = nil, request_options = {}, *arguments)
@@ -18,12 +16,9 @@ module OAuthActiveResource
         @http = create_http(path)
         _uri = URI.parse(path)
         path = "#{_uri.path}#{_uri.query ? "?#{_uri.query}" : ""}"
-
       end
 
-      rsp = http.request(create_http_request(http_method, path, token, request_options, *arguments))
-
-      rsp
+      http.request(create_http_request(http_method, path, token, request_options, *arguments))
     end
     
     def get(path, headers = {})
@@ -49,7 +44,5 @@ module OAuthActiveResource
     def sign!(*args)
       # do nothing
     end
-    
   end
 end
-
