@@ -1,5 +1,6 @@
 require 'multipart'
 require 'uri'
+require 'net/http/post/multipart'
 
 module OAuthActiveResource
   class Resource < ActiveResource::Base
@@ -111,20 +112,13 @@ module OAuthActiveResource
     
     # allows you to POST/PUT an oauth authenticated multipart request
     def self.send_multipart_request(method, path, files, params={})
-      req = Net::HTTP::Post.new(path)
-      if method == :put
-        params[:_method] = "PUT"
+      params[:_method] = "PUT" if method == :put      
+      files.each do |k, v|
+        params[k] = UploadIO.new(v, 'application/octet', v.path)
       end
-      
-      params = multipart_bug_fix(params)
-      
-      file_hash = {}
-      files.each do |k,v|
-        file_hash[k] = Net::HTTP::FileForPost.new(v)
-      end
-      req.set_multipart_data(file_hash, params)  
-      
-      oauth_connection.sign!(req) if not oauth_connection.nil?   
+
+      req = Net::HTTP::Post::Multipart.new path, params
+      oauth_connection.sign!(req) if not oauth_connection.nil?
       res = Net::HTTP.new(site.host, site.port).start do |http|
         http.request(req)
       end
