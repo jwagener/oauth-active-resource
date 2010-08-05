@@ -4,14 +4,14 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "oauth-active-resource"
-    gem.summary = "An OAuth enabled ActiveResource wrapper" 
-    gem.email = "johannes@wagener.cc"
+    gem.name     = "oauth-active-resource"
+    gem.summary  = "An OAuth enabled ActiveResource wrapper"
+    gem.email    = "johannes@wagener.cc"
     gem.homepage = "http://github.com/jwagener/oauth-active-resource"
-    gem.authors = ["Johannes Wagener"]
+    gem.authors  = [ "Johannes Wagener", "Hannes Tyden" ]
     gem.add_dependency "oauth", ">= 0.3.6"
-    gem.add_dependency "activeresource"    
-    gem.add_dependency "multipart"    
+    gem.add_dependency "activeresource"
+    gem.add_dependency "multipart"
   end
 rescue LoadError
   puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"

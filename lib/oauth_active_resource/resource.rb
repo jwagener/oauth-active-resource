@@ -12,14 +12,14 @@ module OAuthActiveResource
     
     def self.connection(refresh = false)
       @connection = Connection.new(oauth_connection, site,format) if @connection.nil? || refresh
-      @connection.timeout = timeout if timeout      
-      return @connection      
+      @connection.timeout = timeout if timeout
+      return @connection
     end
     
     #TODO remove when soundcloud api is fixed
     # if self has no id, try extracting from uri
     def load(*args)
-      super(*args)  
+      super(*args)
       self.id = self.uri.split('/').last if self.id.nil? and defined? self.uri
     end
     
@@ -31,16 +31,16 @@ module OAuthActiveResource
     
     def self.load_collection(*args)
       instantiate_collection(*args)
-    end     
+    end
 
     #
     #   belongs_to :user
     #  => will look for a user-id tag and load this user
-    # 
+    #
     def self.belongs_to(*args)
-      args.each do |k| 
+      args.each do |k|
         name = k.to_s
-        define_method(k) do          
+        define_method(k) do
           if @belongs_to_cache.nil?
             @belongs_to_cache = {}
           end
@@ -48,7 +48,7 @@ module OAuthActiveResource
             resource  = find_or_create_resource_for(name)
             @belongs_to_cache[name] = resource.find(self.send("#{name}_id"))
           end
-          return @belongs_to_cache[name]          
+          return @belongs_to_cache[name]
         end
       end
     end
@@ -59,29 +59,29 @@ module OAuthActiveResource
     # User 123 (http://example.com/users/123/) has many friends
     # The list of friends can be accessed by http://example.com/users/123/friends
     # Our class definition:
-    # 
+    #
     #   class User < Resource
     #     has_many :friends
     #   end
-    # 
+    #
     #   user = User.find(123)
     #   user.friends.each do |friend|
     #     p friend.name
     #   end
-    # 
-    #   # adding a friend 
+    #
+    #   # adding a friend
     #   stranger = User.find(987)
     #   user.friends << stranger
     #   user.friends.save
     #  => sends a PUT with collection of friends to http://example.com/users/123/friends ## OUTDATED!!?
     
     def self.has_many(*args)
-      args.each do |k| 
+      args.each do |k|
         name = k.to_s
         singular = name.singularize
-        define_method(k) do |*options|   
+        define_method(k) do |*options|
           
-          options = options.first || {}      
+          options = options.first || {}
           #if @has_many_cache.nil?
           #  @has_many_cache = {}
           #end
@@ -93,13 +93,13 @@ module OAuthActiveResource
             resource  = find_or_create_resource_for(singular)
             @has_many_cache[cache_name] = OAuthActiveResource::UniqueResourceArray.new(self.connection,resource,collection_path,options)
           end
-          return @has_many_cache[cache_name]          
+          return @has_many_cache[cache_name]
         end
       end
     end
     
     
-    # ignore is added because the multipart gem is adding an extra new line 
+    # ignore is added because the multipart gem is adding an extra new line
     # to the last parameter which will break parsing of track[sharing]
     def self.multipart_bug_fix(params)
       ordered_params = ActiveSupport::OrderedHash.new
