@@ -1,6 +1,4 @@
-require 'multipart'
-require 'uri'
-require 'net/http/post/multipart'
+#require 'uri'
 
 module OAuthActiveResource
   class Resource < ActiveResource::Base

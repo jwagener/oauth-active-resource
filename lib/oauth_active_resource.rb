@@ -1,12 +1,10 @@
-require 'rubygems'
-
-gem 'activeresource'
 require 'active_resource'
-
-gem 'oauth'
 require 'oauth'
-
 require 'digest/md5'
+require File.expand_path('oauth_active_resource/connection',              File.dirname(__FILE__))
+require File.expand_path('oauth_active_resource/resource',                File.dirname(__FILE__))
+require File.expand_path('oauth_active_resource/unique_resource_array',   File.dirname(__FILE__))
+require File.expand_path('oauth_active_resource/fake_oauth_access_token', File.dirname(__FILE__))
 
 module OAuthActiveResource
   # TODO check if klass has ancestor OAuthActiveResource
@@ -59,7 +57,3 @@ module OAuthActiveResource
   end
 end
 
-require File.expand_path('oauth_active_resource/connection',              File.dirname(__FILE__))
-require File.expand_path('oauth_active_resource/resource',                File.dirname(__FILE__))
-require File.expand_path('oauth_active_resource/unique_resource_array',   File.dirname(__FILE__))
-require File.expand_path('oauth_active_resource/fake_oauth_access_token', File.dirname(__FILE__))
