@@ -15,7 +15,7 @@ begin
     gem.add_dependency "multipart"
   end
 rescue LoadError
-  puts "Jeweler not available. Install it with: sudo gem install technicalpickles-jeweler -s http://gems.github.com"
+  puts "Jeweler not available. Install it with: sudo gem install jeweler"
 end
 
 require 'rspec/core/rake_task'
