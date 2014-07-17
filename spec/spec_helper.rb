@@ -1,19 +1,10 @@
-require 'spec'
-
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 
-require 'rubygems'
-
-gem 'oauth'
 require 'oauth'
-
-
 require 'oauth_active_resource'
 
-
-
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
   
 end
 
@@ -25,6 +16,5 @@ module TestClient
   module Models
     class XZ < OAuthActiveResource::Resource
     end
-    
   end
 end

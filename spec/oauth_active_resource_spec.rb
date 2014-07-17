@@ -1,12 +1,7 @@
-require 'rubygems'
-
-gem 'oauth', '>= 0.3.6'
 require 'oauth'
-
 require 'spec_helper'
 
 describe "OauthActiveResource" do
-  
   it "should register a new Module fork" do
     cl = TestClient.register
   end
